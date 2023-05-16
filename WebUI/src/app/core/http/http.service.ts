@@ -25,4 +25,8 @@ export class HttpService {
   delete(path: string, options?: any): any {
     return this.http.delete(`${config.apiUrl}/${path}`, options)
   }
+
+  getPage(path: string, pageNumber: number, pageSize: number): any {
+    return this.http.get(`${config.apiUrl}/${path}/${pageNumber}/${pageSize}`)
+  }
 }

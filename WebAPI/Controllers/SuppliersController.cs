@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataContext.Models;
+using DataContext.DTO;
+using System.Drawing.Printing;
 
 namespace WebAPI.Controllers
 {
@@ -21,14 +23,25 @@ namespace WebAPI.Controllers
         }
 
         // GET: api/Suppliers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
+        [HttpGet("{pageNumber}/{pageSize}")]
+        public async Task<ActionResult<PagedResultDTO<Supplier>>> GetSuppliers(int pageNumber, int pageSize)
         {
-          if (_context.Suppliers == null)
-          {
-              return NotFound();
-          }
-            return await _context.Suppliers.ToListAsync();
+            if (_context.Suppliers == null)
+            {
+                return NotFound();
+            }
+            var totalItems = await _context.Suppliers.CountAsync();
+            var suppliers = await _context.Suppliers
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            PagedResultDTO<Supplier> pagedResult = new PagedResultDTO<Supplier>()
+            {
+                TotalCount = totalItems,
+                Results = suppliers
+            };
+
+            return pagedResult;
         }
 
         // GET: api/Suppliers/5

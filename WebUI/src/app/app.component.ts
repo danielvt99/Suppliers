@@ -9,13 +9,13 @@ import { Component } from '@angular/core';
 export class AppComponent {
   public forecasts?: WeatherForecast[];
 
-  constructor(http: HttpClient) {
-    http.get<WeatherForecast[]>('/weatherforecast').subscribe(result => {
-      this.forecasts = result;
-    }, error => console.error(error));
-  }
+  // constructor(http: HttpClient) {
+  //   http.get<WeatherForecast[]>('/weatherforecast').subscribe(result => {
+  //     this.forecasts = result;
+  //   }, error => console.error(error));
+  // }
 
-  title = 'WebUI';
+  // title = 'WebUI';
 }
 
 interface WeatherForecast {
