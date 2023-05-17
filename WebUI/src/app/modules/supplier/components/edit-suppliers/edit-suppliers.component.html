@@ -1,1 +1,33 @@
-<p>edit-suppliers works!</p>
+<section>
+    <div class="editContainer">
+        <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+            <!-- <mat-form-field class="col-12"> -->
+            <div>
+                <mat-form-field appearance="fill">
+                    <!-- <mat-label>Fill form field</mat-label> -->
+                    <input matInput formControlName="name" placeholder="Name">
+                    <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+                    <mat-hint>Hint</mat-hint>
+                </mat-form-field>
+            </div>
+                <!-- <label for="name">Name: </label>
+                <input matInput formControlName="name" placeholder="Name"> -->
+            <!-- </mat-form-field> -->
+            <!-- <mat-form-field>
+                <div>
+                    <label for="name">Name: </label>
+                    <input matInput formControlName="telephoneNumber" placeholder="Telephone Number">
+                </div>
+            </mat-form-field> -->
+                <div>
+                    <mat-form-field appearance="fill">
+                        <!-- <mat-label>Telephone Number</mat-label> -->
+                        <input matInput formControlName="telephoneNumber" placeholder="Telephone Number">
+                        <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+                        <mat-hint>Hint</mat-hint>
+                    </mat-form-field>
+                </div>
+                <button mat-raised-button color="primary" type="submit">Save</button>
+        </form>
+    </div>
+</section>
