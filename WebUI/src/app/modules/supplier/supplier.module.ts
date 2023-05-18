@@ -8,6 +8,7 @@ import {MatTableModule} from '@angular/material/table'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     FormsModule,
     ReactiveFormsModule,
     MatPaginatorModule
+  ],
+  providers:[
+    DialogComponent
   ]
 })
 export class SupplierModule { }

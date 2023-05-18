@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
             }
             var totalItems = await _context.Suppliers.CountAsync();
             var suppliers = await _context.Suppliers
-                .Skip((pageNumber - 1) * pageSize)
+                .Skip(pageNumber * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
             PagedResultDTO<Supplier> pagedResult = new PagedResultDTO<Supplier>()
@@ -98,25 +98,27 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
         {
-          if (_context.Suppliers == null)
-          {
-              return Problem("Entity set 'DatabaseContext.Suppliers'  is null.");
-          }
+            if (_context.Suppliers == null)
+            {
+                return Problem("Entity set 'DatabaseContext.Suppliers'  is null.");
+            }
+
             _context.Suppliers.Add(supplier);
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
-                if (SupplierExists(supplier.SupplierId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                Console.WriteLine(e);
+                //if (SupplierExists(supplier.SupplierId))
+                //{
+                //    return Conflict();
+                //}
+                //else
+                //{
+                //    throw;
+                //}
             }
 
             return CreatedAtAction("GetSupplier", new { id = supplier.SupplierId }, supplier);

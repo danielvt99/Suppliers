@@ -5,7 +5,7 @@ namespace DataContext.Models;
 
 public partial class Supplier
 {
-    public long SupplierId { get; set; }
+    public long? SupplierId { get; set; }
 
     public string? Name { get; set; }
 

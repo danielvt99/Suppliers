@@ -1,16 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 
-.app-container header{
+.app-container mat-toolbar{
     height: 10vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     background-color: black;
-    align-content: center;
-    justify-content: center;
+    color: white;
 }
 
 .app-container main{
@@ -27,6 +26,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     align-items: center;
     height: 10vh;
     flex-direction: column;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
 }
 
 .container{
@@ -78,6 +81,7 @@ td.mat-cell {
 }
 
 .editContainer{
+    border-radius: 20px;
     display: flex;
     align-self: center;
     flex-direction: column;
@@ -87,8 +91,25 @@ td.mat-cell {
     align-items: center;
     width: 100%;
     height: 20%;
+    background-color: rgba(1, 12, 30, 0.2);
+    padding: 30px;
 }
 
 .paginator{
     border: solid 1pt black;
+}
+
+.width-textArea {  
+    width: 220px;  
+    max-width: 300px;  
+    word-wrap: break-word;
+}
+
+.editContainer mat-form-field{
+    margin-top: 2%;
+    width:400px !important;
+}
+
+.editContainer button{
+    font-size: 18px;
 }

@@ -16,7 +16,7 @@ export class ListSuppliersComponent {
   dataSource: Supplier[] = [];
   displayedColumns: string[] = ['SupplierId', 'Name', 'TelephoneNumber', 'View'];
 
-  pageNumber: number = 1;
+  pageNumber: number = 0;
   pageSize: number = 8;
   pageLength: number = 0;
   pageSizeOptions: number [] = [8, 16, 24, 100]
@@ -30,13 +30,17 @@ export class ListSuppliersComponent {
 
   getSuppliers(){
     this.http.getPage(this.path, this.pageNumber, this.pageSize).subscribe((resp:any) => {
-      console.log(resp)
       this.dataSource = resp.results;
+      this.pageLength = resp.totalCount;
     })
   }
 
-  editField(){
+  createSupplier(){
     this.router.navigate(['supplier', 'edit', { id: 1 }]);
+  }
+
+  editField(element:any){
+    this.router.navigate(['supplier', 'edit'],{state: { supplier: element }});
   }
 
   onPageChange(event: PageEvent) {
@@ -48,6 +52,7 @@ export class ListSuppliersComponent {
   updateItems() {
     const startIndex = this.pageNumber * this.pageSize;
     const endIndex = startIndex + this.pageSize;
+    this.getSuppliers();
     // this.pageSize = this.pageSizeOptions.slice(startIndex, endIndex);
   }
 }
