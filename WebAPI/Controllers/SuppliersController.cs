@@ -83,6 +83,7 @@ namespace WebAPI.Controllers
                     existingSupplier.TelephoneNumber = supplier.TelephoneNumber;
                     existingSupplier.Name = supplier.Name;
                     existingSupplier.Products = supplier.Products;
+                    existingSupplier.OnEntityUpdating();
                 }
                 else
                 {

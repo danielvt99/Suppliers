@@ -1,12 +1,16 @@
-﻿using System;
+﻿using DataContext.Abstract;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataContext.Models;
 
-public partial class Supplier
+public partial class Supplier : AuditEntity
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Supplier() 
+    {
+        OnEntityCreating();
+    }
+
     public long SupplierId { get; set; }
 
     public string? Name { get; set; }

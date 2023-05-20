@@ -32,6 +32,8 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.ProductId)
                 .ValueGeneratedNever()
                 .HasColumnName("ProductID");
+            entity.Property(e => e.DateCreated).HasColumnType("datetime");
+            entity.Property(e => e.DateUpdated).HasColumnType("datetime");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -50,6 +52,8 @@ public partial class DatabaseContext : DbContext
         {
             entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE666B400729D58");
 
+            entity.Property(e => e.DateCreated).HasColumnType("datetime");
+            entity.Property(e => e.DateUpdated).HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.TelephoneNumber)
                 .HasMaxLength(20)

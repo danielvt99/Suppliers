@@ -1,9 +1,10 @@
-﻿using System;
+﻿using DataContext.Abstract;
+using System;
 using System.Collections.Generic;
 
 namespace DataContext.Models;
 
-public partial class Product
+public partial class Product :AuditEntity
 {
     public int ProductId { get; set; }
 
