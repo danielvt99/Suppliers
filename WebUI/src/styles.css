@@ -41,7 +41,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 .button-row{
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-bar{
+    margin-bottom: -1.25em;
 }
 
 .supplier-table {

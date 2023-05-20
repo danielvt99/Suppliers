@@ -1,8 +1,16 @@
 <section>
     <div class="container">
         <div class="button-row">
-            <button mat-raised-button (click)="createSupplier()">Create</button>
+            <button mat-raised-button color="primary" (click)="createSupplier()">Create</button>       
+            <mat-form-field class="search-bar">
+                <mat-label>Telephone</mat-label>
+                <input type="tel" matInput placeholder="Search" #searchField (input)="searchSuppliers(searchField.value)">
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
         </div>
+        <!-- <div class="search-row">
+            <input matInput>
+        </div> -->
         <table fixedLayout="true" mat-table [dataSource]="dataSource" class="supplier-table mat-elevation-z8">
             <ng-container matColumnDef="SupplierId">
                 <th class="width-textArea" mat-header-cell *matHeaderCellDef> Supplier ID </th>

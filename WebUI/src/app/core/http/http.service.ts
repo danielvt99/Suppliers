@@ -26,7 +26,11 @@ export class HttpService {
     return this.http.delete(`${config.apiUrl}/${path}`, options)
   }
 
-  getPage(path: string, pageNumber: number, pageSize: number): any {
-    return this.http.get(`${config.apiUrl}/${path}/${pageNumber}/${pageSize}`)
+  getPaged(path: string, pageNumber: number, pageSize: number, search?:string): any {
+    let queryString = `${config.apiUrl}/${path}/${pageNumber}/${pageSize}`
+    if(search){
+      queryString += `?search=${encodeURIComponent(search)}`
+    }
+    return this.http.get(queryString)
   }
 }

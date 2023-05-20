@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DataContext.Models;
 using DataContext.DTO;
 using System.Drawing.Printing;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebAPI.Controllers
 {
@@ -24,17 +25,28 @@ namespace WebAPI.Controllers
 
         // GET: api/Suppliers
         [HttpGet("{pageNumber}/{pageSize}")]
-        public async Task<ActionResult<PagedResultDTO<Supplier>>> GetSuppliers(int pageNumber, int pageSize)
+        public async Task<ActionResult<PagedResultDTO<Supplier>>> GetSuppliers(int pageNumber, int pageSize, string? search)
         {
             if (_context.Suppliers == null)
             {
                 return NotFound();
             }
-            var totalItems = await _context.Suppliers.CountAsync();
-            var suppliers = await _context.Suppliers
+
+            IQueryable<Supplier> query = _context.Suppliers;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                // Apply the search filter if the search parameter is provided
+                query = query.Where(s => s.Name.Contains(search));
+            }
+
+            var totalItems = await query.CountAsync();
+            var suppliers = await query
                 .Skip(pageNumber * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
+
             PagedResultDTO<Supplier> pagedResult = new PagedResultDTO<Supplier>()
             {
                 TotalCount = totalItems,
