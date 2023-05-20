@@ -64,25 +64,40 @@ namespace WebAPI.Controllers
 
         // PUT: api/Suppliers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSupplier(long id, Supplier supplier)
+        [HttpPut]
+        public async Task<IActionResult> PutSupplier(Supplier supplier)
         {
-            if (id != supplier.SupplierId)
-            {
-                return BadRequest();
-            }
+            Supplier existingSupplier = await _context.Suppliers.FindAsync(supplier.SupplierId);
 
-            _context.Entry(supplier).State = EntityState.Modified;
+            var requestStatus = new RequestStatus
+            {
+                Id = existingSupplier.SupplierId,
+                Status = "Success",
+                Message = ""
+            };
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SupplierExists(id))
+                if (existingSupplier != null)
+                {
+                    existingSupplier.TelephoneNumber = supplier.TelephoneNumber;
+                    existingSupplier.Name = supplier.Name;
+                    existingSupplier.Products = supplier.Products;
+                }
+                else
                 {
                     return NotFound();
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                var innerException = e.InnerException;
+                if (innerException != null)
+                {
+                    requestStatus.Status = "Failed";
+                    requestStatus.Message = innerException.Message;
+                    return Ok(requestStatus);
                 }
                 else
                 {
@@ -90,7 +105,7 @@ namespace WebAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(requestStatus);
         }
 
         // POST: api/Suppliers
@@ -98,6 +113,12 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
         {
+            var requestStatus = new RequestStatus
+            {
+                Status = "Success",
+                Message = ""
+            };
+
             if (_context.Suppliers == null)
             {
                 return Problem("Entity set 'DatabaseContext.Suppliers'  is null.");
@@ -107,21 +128,31 @@ namespace WebAPI.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+
+                requestStatus.Id = supplier.SupplierId;
+                requestStatus.Status = "Success";
+                requestStatus.Message = "";
+                return CreatedAtAction("PostSupplier", requestStatus);
             }
             catch (DbUpdateException e)
             {
-                Console.WriteLine(e);
-                //if (SupplierExists(supplier.SupplierId))
-                //{
-                //    return Conflict();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
-            }
+                var innerException = e.InnerException;
+                if (innerException != null)
+                {
+                    requestStatus.Status = "Failed";
+                    requestStatus.Message = innerException.Message;
+                    return Ok(requestStatus);
+                }
 
-            return CreatedAtAction("GetSupplier", new { id = supplier.SupplierId }, supplier);
+                if (SupplierExists(supplier.SupplierId))
+                {
+                    return Conflict(requestStatus);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         // DELETE: api/Suppliers/5

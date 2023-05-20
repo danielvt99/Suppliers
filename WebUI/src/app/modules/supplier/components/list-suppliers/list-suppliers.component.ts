@@ -36,7 +36,7 @@ export class ListSuppliersComponent {
   }
 
   createSupplier(){
-    this.router.navigate(['supplier', 'edit', { id: 1 }]);
+    this.router.navigate(['supplier', 'edit']);
   }
 
   editField(element:any){

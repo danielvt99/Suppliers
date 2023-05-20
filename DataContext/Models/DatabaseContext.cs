@@ -27,7 +27,7 @@ public partial class DatabaseContext : DbContext
     {
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6ED1CEFFBF6");
+            entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6ED0CC18B7E");
 
             entity.Property(e => e.ProductId)
                 .ValueGeneratedNever()
@@ -43,14 +43,13 @@ public partial class DatabaseContext : DbContext
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.Products)
                 .HasForeignKey(d => d.SupplierId)
-                .HasConstraintName("FK__Products__Suppli__398D8EEE");
+                .HasConstraintName("FK__Products__Suppli__5165187F");
         });
 
         modelBuilder.Entity<Supplier>(entity =>
         {
-            entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE666B48A2A7603");
+            entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE666B400729D58");
 
-            entity.Property(e => e.SupplierId).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.TelephoneNumber)
                 .HasMaxLength(20)

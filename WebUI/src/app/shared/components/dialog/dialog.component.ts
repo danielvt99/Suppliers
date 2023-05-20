@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 // import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 
@@ -10,24 +10,14 @@ import { MatDialog } from '@angular/material/dialog';
 })
 
 export class DialogComponent {
-    constructor(public dialog: MatDialog) {}
-    
-    title: string  = '';
-    message: string  = '';
+    constructor(
+      public dialog: MatDialogRef<DialogComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any
+    ) {}
 
-    openDialog(title: string, message: string): void {
-      this.title = title;
-      this.message = message;
-      this.dialog.open(DialogComponent, {
-        width: '250px'
-      });
-    }
+    @Output() buttonClicked = new EventEmitter<string>();    
 
-    getDialog(title: string, message: string): void {
-      this.title = title;
-      this.message = message;
-      this.dialog.open(DialogComponent, {
-        width: '250px'
-      });
+    onButtonClicked(button: string): void {
+      this.dialog.close(button);
     }
 }
