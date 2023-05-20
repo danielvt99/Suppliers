@@ -3,8 +3,8 @@
         <div class="button-row">
             <button mat-raised-button color="primary" (click)="createSupplier()">Create</button>       
             <mat-form-field class="search-bar">
-                <mat-label>Telephone</mat-label>
-                <input type="tel" matInput placeholder="Search" #searchField (input)="searchSuppliers(searchField.value)">
+                <mat-label>Search</mat-label>
+                <input type="tel" matInput placeholder="Search" #searchField (input)="getSuppliers(searchField.value)">
                 <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
         </div>

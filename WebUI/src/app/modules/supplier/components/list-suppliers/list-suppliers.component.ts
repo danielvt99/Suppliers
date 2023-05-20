@@ -28,14 +28,7 @@ export class ListSuppliersComponent {
     this.getSuppliers();
   }
 
-  getSuppliers(){
-    this.http.getPaged(this.path, this.pageNumber, this.pageSize).subscribe((resp:any) => {
-      this.dataSource = resp.results;
-      this.pageLength = resp.totalCount;
-    })
-  }
-
-  searchSuppliers(search:string){
+  getSuppliers(search?:string){
     this.http.getPaged(this.path, this.pageNumber, this.pageSize, search).subscribe((resp:any) => {
       this.dataSource = resp.results;
       this.pageLength = resp.totalCount;
