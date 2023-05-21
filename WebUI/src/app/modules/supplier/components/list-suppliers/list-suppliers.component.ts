@@ -1,5 +1,5 @@
 import { NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Renderer2 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { HttpService } from 'src/app/core/http/http.service';
@@ -11,7 +11,7 @@ import { Supplier } from 'src/app/core/models/suppliers';
   templateUrl: './list-suppliers.component.html',
   styleUrls: ['./list-suppliers.component.css']
 })
-export class ListSuppliersComponent {
+export class ListSuppliersComponent implements AfterViewInit {
 
   dataSource: Supplier[] = [];
   displayedColumns: string[] = ['SupplierId', 'Name', 'TelephoneNumber', 'View'];
@@ -21,11 +21,16 @@ export class ListSuppliersComponent {
   pageLength: number = 0;
   pageSizeOptions: number [] = [8, 16, 24, 100]
   path:string = 'Suppliers'
+
+  isMobile: boolean;
   
   options: {} = {}
 
-  constructor(private http:HttpService,  private router: Router ){
+  constructor(private http:HttpService,  
+    private router: Router, 
+    private renderer: Renderer2){
     this.getSuppliers();
+    this.isMobile = this.checkIfMobileDevice();
   }
 
   getSuppliers(search?:string){
@@ -33,6 +38,24 @@ export class ListSuppliersComponent {
       this.dataSource = resp.results;
       this.pageLength = resp.totalCount;
     })
+  }
+
+  checkIfMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
+  setMobileProperties(){
+    const rows = document.querySelectorAll('.supplier-table tr')
+    const rows2 = document.querySelectorAll('.tr');
+    const rows3 = document.querySelectorAll('tr.mat-row');
+
+
+      rows.forEach(row => {
+        this.renderer.addClass(row, 'clickable-row');
+        this.renderer.listen(row, 'click', () => {
+          this.editField(row);
+        });
+      });
   }
 
   createSupplier(){
@@ -54,5 +77,11 @@ export class ListSuppliersComponent {
     const endIndex = startIndex + this.pageSize;
     this.getSuppliers();
     // this.pageSize = this.pageSizeOptions.slice(startIndex, endIndex);
+  }
+
+  ngAfterViewInit() {
+    if (this.isMobile) {
+      this.setMobileProperties();
+    }
   }
 }

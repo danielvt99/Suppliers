@@ -5,7 +5,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 
 .app-container mat-toolbar{
-    height: 10vh;
+    min-height: 10vh;
     display: flex;
     flex-direction: row;
     background-color: black;
@@ -16,7 +16,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    min-height: 80vh;
     flex-direction: column;
 }
 
@@ -24,7 +24,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 10vh;
     flex-direction: column;
 }
 
@@ -105,9 +104,10 @@ td.mat-cell {
 }
 
 .width-textArea {  
-    width: 220px;  
-    max-width: 300px;  
-    word-wrap: break-word;
+    width: 380px;
+    max-width: 400px;
+    white-space: nowrap;
+    /* word-wrap: break-word; */
 }
 
 .editContainer mat-form-field{
@@ -117,4 +117,45 @@ td.mat-cell {
 
 .editContainer button{
     font-size: 18px;
+}
+
+
+@media (max-width: 600px) {
+    .hide-column {
+      display: none;
+    }
+
+    .editContainer{
+        width: 100%;
+    }
+
+    .width-textArea {  
+        width: 100px;
+        max-width: 200px;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    section{
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+    }
+
+    .editContainer mat-form-field{
+        /* margin-top: 5%; */
+        max-width:250px !important;
+    }
+    /* .supplier-table {
+        max-width: 80%;
+    } */
+
+    /* .container {
+        max-width: 80%;
+    } */
+}
+
+.clickable-row {
+    cursor: pointer !important;
 }

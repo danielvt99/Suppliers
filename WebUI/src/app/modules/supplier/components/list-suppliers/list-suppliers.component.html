@@ -13,8 +13,8 @@
         </div> -->
         <table fixedLayout="true" mat-table [dataSource]="dataSource" class="supplier-table mat-elevation-z8">
             <ng-container matColumnDef="SupplierId">
-                <th class="width-textArea" mat-header-cell *matHeaderCellDef> Supplier ID </th>
-                <td class="width-textArea"mat-cell *matCellDef="let supplier"> {{ supplier.supplierId }} </td>
+                <th class="width-textArea hide-column" mat-header-cell *matHeaderCellDef> Supplier ID </th>
+                <td class="width-textArea hide-column" mat-cell *matCellDef="let supplier"> {{ supplier.supplierId }} </td>
             </ng-container>
         
             <ng-container matColumnDef="Name">
@@ -28,12 +28,12 @@
             </ng-container>
 
             <ng-container matColumnDef="View">
-                <th class="width-textArea" mat-header-cell *matHeaderCellDef> Action </th>
-                <td class="width-textArea" style="text-align: center;" mat-cell *matCellDef="let supplier"><button mat-button (click)="editField(supplier)">View</button></td>
+                <th class="width-textArea hide-column" mat-header-cell *matHeaderCellDef> Action </th>
+                <td class="width-textArea hide-column" style="text-align: center;" mat-cell *matCellDef="let supplier"><button mat-button (click)="editField(supplier)">View</button></td>
             </ng-container>
         
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'clickable-row':isMobile}" (click)="editField(row)"></tr>
         </table>
         <div class="paginator">
             <mat-paginator      
