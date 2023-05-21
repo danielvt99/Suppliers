@@ -58,14 +58,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 
 .supplier-table td {
-    /* row border */
     border: 1px solid black;
   }
 
 td.mat-cell {
-    /* row padding */
     padding: 16px 0;
-    /* row border */
     border-bottom: 1px solid #ffa600;
     border-top: 1px solid #ffa600;
    }
@@ -144,16 +141,8 @@ td.mat-cell {
     }
 
     .editContainer mat-form-field{
-        /* margin-top: 5%; */
         max-width:250px !important;
     }
-    /* .supplier-table {
-        max-width: 80%;
-    } */
-
-    /* .container {
-        max-width: 80%;
-    } */
 }
 
 .clickable-row {

@@ -23,7 +23,6 @@ export class EditSuppliersComponent implements OnInit{
 
   constructor(
     private formBuilder: FormBuilder, 
-    // private route: ActivatedRoute, 
     private http:HttpService,
     private dialog: DialogService,
     private router: Router) {
