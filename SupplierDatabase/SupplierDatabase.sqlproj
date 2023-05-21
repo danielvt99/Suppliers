@@ -60,13 +60,14 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
-    <Folder Include="Insert Scripts" />
+    <Folder Include="scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Suppliers.sql" />
     <Build Include="dbo\Tables\Products.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Insert Scripts\InsertSuppliers.sql" />
+    <None Include="scripts\InsertSuppliers.sql" />
+    <None Include="scripts\Create Supplier Database and tables.sql" />
   </ItemGroup>
 </Project>
