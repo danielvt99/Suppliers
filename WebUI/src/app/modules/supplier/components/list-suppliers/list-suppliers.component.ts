@@ -1,9 +1,9 @@
-import { NgStyle } from '@angular/common';
-import { AfterViewInit, Component, OnInit, Renderer2 } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { HttpService } from 'src/app/core/http/http.service';
 import { Supplier } from 'src/app/core/models/suppliers';
+import { DialogService } from 'src/app/core/dialog/dialog.service';
 
 
 @Component({
@@ -27,7 +27,8 @@ export class ListSuppliersComponent {
   options: {} = {}
 
   constructor(private http:HttpService,  
-    private router: Router
+    private router: Router,
+    private dialog: DialogService,
   ){
     this.getSuppliers();
     this.isMobile = this.checkIfMobileDevice();
@@ -35,9 +36,15 @@ export class ListSuppliersComponent {
 
   //Generic way of getting suppliers so it can be reused in the search.
   getSuppliers(search?:string){
-    this.http.getPaged(this.path, this.pageNumber, this.pageSize, search).subscribe((resp:any) => {
-      this.dataSource = resp.results;
-      this.pageLength = resp.totalCount;
+    this.http.getPaged(this.path, this.pageNumber, this.pageSize, search).subscribe((response:any) => {
+      // Handle successful response here
+      this.dataSource = response.results;
+      this.pageLength = response.totalCount;
+    },
+    (error:any) => {
+      // Handle error here
+      this.dialog.openDialog('Error', error.message)
+      console.error('Error:', error);
     })
   }
 

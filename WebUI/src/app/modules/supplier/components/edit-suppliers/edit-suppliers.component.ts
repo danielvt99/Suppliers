@@ -49,6 +49,11 @@ export class EditSuppliersComponent implements OnInit{
     this.http.post(this.path, this.supplierForm.value).subscribe((resp:any) => {
       this.getStatusTitleAction(resp);
       this.showStatusDialog();
+    },    
+    (error:any) => {
+      // Handle error here
+      this.dialog.openDialog('Error', error.message)
+      console.error('Error:', error);
     })
   }
 
@@ -99,6 +104,11 @@ export class EditSuppliersComponent implements OnInit{
           this.http.put(this.path, this.supplierForm.value).subscribe((resp:any) => {
             this.getStatusTitleAction(resp);
             this.showStatusDialog();
+          },    
+          (error:any) => {
+            // Handle error here
+            this.dialog.openDialog('Error', error.message)
+            console.error('Error:', error);
           })
         }
     })

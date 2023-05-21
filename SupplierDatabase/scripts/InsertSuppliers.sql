@@ -1,4 +1,5 @@
-﻿INSERT INTO [dbo].[Suppliers]([Name],[TelephoneNumber],[DateCreated],[DateUpdated])
+﻿-- Insert data into Suppliers table
+INSERT INTO [dbo].[Suppliers]([Name],[TelephoneNumber],[DateCreated],[DateUpdated])
 VALUES('Eskom Holdings Limited', '086 0037566', GETDATE(), GETDATE()),
 ('Focus Rooms (Pty) Ltd', '0820776910', GETDATE(), GETDATE()),
 ('GSM Electro', '0128110069', GETDATE(), GETDATE()),
@@ -23,3 +24,4 @@ VALUES('Eskom Holdings Limited', '086 0037566', GETDATE(), GETDATE()),
 ('Brietta Trading (Pty) Ltd', '0115526000', GETDATE(), GETDATE()),
 ('C.N. Braam t/a CNB Electrical Services', '0832835399', GETDATE(), GETDATE()),
 ('Creative Crew (Pty) Ltd', '0120040218', GETDATE(), GETDATE())
+
