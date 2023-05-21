@@ -1,24 +1,12 @@
-﻿<h1 id="tableLabel">Weather forecast</h1>
+﻿<div class="app-container">
+    <header>
+        <app-header></app-header>
+    </header>
+    <main class="content">
+        <router-outlet></router-outlet>
+    </main>
+    <footer class="footer">
+        &copy; 2023 Daniel van Tonder. All rights reserved.
+    </footer>
+</div>
 
-<p>This component demonstrates fetching data from the server.</p>
-
-<p *ngIf="!forecasts"><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> for more details.</em></p>
-
-<table *ngIf="forecasts">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let forecast of forecasts">
-            <td>{{ forecast.date }}</td>
-            <td>{{ forecast.temperatureC }}</td>
-            <td>{{ forecast.temperatureF }}</td>
-            <td>{{ forecast.summary }}</td>
-        </tr>
-    </tbody>
-</table>

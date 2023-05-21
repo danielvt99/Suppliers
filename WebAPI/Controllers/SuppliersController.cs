@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataContext.Models;
+using DataContext.DTO;
+using System.Drawing.Printing;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebAPI.Controllers
 {
@@ -21,14 +24,36 @@ namespace WebAPI.Controllers
         }
 
         // GET: api/Suppliers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
+        [HttpGet("{pageNumber}/{pageSize}")]
+        public async Task<ActionResult<PagedResultDTO<Supplier>>> GetSuppliers(int pageNumber, int pageSize, string? search)
         {
-          if (_context.Suppliers == null)
-          {
-              return NotFound();
-          }
-            return await _context.Suppliers.ToListAsync();
+            if (_context.Suppliers == null)
+            {
+                return NotFound();
+            }
+
+            IQueryable<Supplier> query = _context.Suppliers;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                // Apply the search filter if the search parameter is provided
+                query = query.Where(s => s.Name.Contains(search));
+            }
+
+            var totalItems = await query.CountAsync();
+            var suppliers = await query
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+
+            PagedResultDTO<Supplier> pagedResult = new PagedResultDTO<Supplier>()
+            {
+                TotalCount = totalItems,
+                Results = suppliers
+            };
+
+            return pagedResult;
         }
 
         // GET: api/Suppliers/5
@@ -51,25 +76,41 @@ namespace WebAPI.Controllers
 
         // PUT: api/Suppliers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSupplier(long id, Supplier supplier)
+        [HttpPut]
+        public async Task<IActionResult> PutSupplier(Supplier supplier)
         {
-            if (id != supplier.SupplierId)
-            {
-                return BadRequest();
-            }
+            Supplier existingSupplier = await _context.Suppliers.FindAsync(supplier.SupplierId);
 
-            _context.Entry(supplier).State = EntityState.Modified;
+            var requestStatus = new RequestStatus
+            {
+                Id = existingSupplier.SupplierId,
+                Status = "Success",
+                Message = ""
+            };
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SupplierExists(id))
+                if (existingSupplier != null)
+                {
+                    existingSupplier.TelephoneNumber = supplier.TelephoneNumber;
+                    existingSupplier.Name = supplier.Name;
+                    existingSupplier.Products = supplier.Products;
+                    existingSupplier.OnEntityUpdating();
+                }
+                else
                 {
                     return NotFound();
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                var innerException = e.InnerException;
+                if (innerException != null)
+                {
+                    requestStatus.Status = "Failed";
+                    requestStatus.Message = innerException.Message;
+                    return Ok(requestStatus);
                 }
                 else
                 {
@@ -77,7 +118,7 @@ namespace WebAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(requestStatus);
         }
 
         // POST: api/Suppliers
@@ -85,28 +126,46 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
         {
-          if (_context.Suppliers == null)
-          {
-              return Problem("Entity set 'DatabaseContext.Suppliers'  is null.");
-          }
+            var requestStatus = new RequestStatus
+            {
+                Status = "Success",
+                Message = ""
+            };
+
+            if (_context.Suppliers == null)
+            {
+                return Problem("Entity set 'DatabaseContext.Suppliers'  is null.");
+            }
+
             _context.Suppliers.Add(supplier);
             try
             {
                 await _context.SaveChangesAsync();
+
+                requestStatus.Id = supplier.SupplierId;
+                requestStatus.Status = "Success";
+                requestStatus.Message = "";
+                return CreatedAtAction("PostSupplier", requestStatus);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
+                var innerException = e.InnerException;
+                if (innerException != null)
+                {
+                    requestStatus.Status = "Failed";
+                    requestStatus.Message = innerException.Message;
+                    return Ok(requestStatus);
+                }
+
                 if (SupplierExists(supplier.SupplierId))
                 {
-                    return Conflict();
+                    return Conflict(requestStatus);
                 }
                 else
                 {
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetSupplier", new { id = supplier.SupplierId }, supplier);
         }
 
         // DELETE: api/Suppliers/5
