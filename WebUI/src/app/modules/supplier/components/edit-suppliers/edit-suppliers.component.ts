@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Supplier } from 'src/app/core/models/suppliers';
 import { HttpService } from 'src/app/core/http/http.service';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
-// import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-edit-suppliers',
@@ -26,6 +25,7 @@ export class EditSuppliersComponent implements OnInit{
     private http:HttpService,
     private dialog: DialogService,
     private router: Router) {
+      //Initialize with empty fields
       this.supplierForm = this.formBuilder.group({
         id: [''],
         name: ['', Validators.required],
@@ -44,14 +44,17 @@ export class EditSuppliersComponent implements OnInit{
     }
   }
 
+  //Add new entry into the database
   createSupplier(){
     this.http.post(this.path, this.supplierForm.value).subscribe((resp:any) => {
-      this.getStatusTitle(resp);
+      this.getStatusTitleAction(resp);
       this.showStatusDialog();
     })
   }
 
-  getStatusTitle(resp:any){
+
+  //There are different statuses depending on whether or not it's an edit page.
+  getStatusTitleAction(resp:any){
     if(this.isEditPage){
       this.action = 'Update'
     }
@@ -68,11 +71,11 @@ export class EditSuppliersComponent implements OnInit{
 
   showStatusDialog(){
     this.dialog.openDialog(this.title, this.message)
-    this.dialog.afterClosed().subscribe((result:any) => {
-      if (result === 'No') {
+    this.dialog.afterClosed().subscribe((action:any) => {
+      if (action === 'No') {
         // No button was clicked
         console.log('No button clicked.');
-      } else if (result === 'Ok') {
+      } else if (action === 'Ok') {
         // Ok button was clicked
         if(this.title != 'Failed')
         {
@@ -82,6 +85,8 @@ export class EditSuppliersComponent implements OnInit{
     })
   }
 
+
+  //With updates it's generally a good idea to prompt for confirmation. Especially when the data is live.
   updateSupplier(){
     let title = 'Confirm'
     let message = 'Are you sure you want to update this record?'
@@ -92,14 +97,15 @@ export class EditSuppliersComponent implements OnInit{
           console.log('No button clicked.');
         } else if (result === 'Yes') {
           this.http.put(this.path, this.supplierForm.value).subscribe((resp:any) => {
-            this.getStatusTitle(resp);
+            this.getStatusTitleAction(resp);
             this.showStatusDialog();
           })
         }
     })
   }
 
-  populateItems(){
+
+  populateSupplier(){
     this.supplierForm = this.formBuilder.group({
       supplierId: [this.supplier.supplierId],
       name: [this.supplier.name, Validators.required],
@@ -112,10 +118,7 @@ export class EditSuppliersComponent implements OnInit{
     this.supplier = state['supplier'] 
     if(this.supplier != null){
       this.isEditPage = true;
-      this.populateItems();
+      this.populateSupplier();
     }  
-    else{
-
-    }
   }
 }

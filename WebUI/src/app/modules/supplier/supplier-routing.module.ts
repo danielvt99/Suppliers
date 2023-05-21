@@ -5,6 +5,7 @@ import { ListSuppliersComponent } from './components/list-suppliers/list-supplie
 
 const routes: Routes = [
   { path: 'edit', component: EditSuppliersComponent },
+  { path: 'create', component: EditSuppliersComponent },
   { path: 'list', component: ListSuppliersComponent },
 ];
 

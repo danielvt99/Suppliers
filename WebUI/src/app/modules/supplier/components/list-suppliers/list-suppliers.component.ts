@@ -11,7 +11,7 @@ import { Supplier } from 'src/app/core/models/suppliers';
   templateUrl: './list-suppliers.component.html',
   styleUrls: ['./list-suppliers.component.css']
 })
-export class ListSuppliersComponent implements AfterViewInit {
+export class ListSuppliersComponent {
 
   dataSource: Supplier[] = [];
   displayedColumns: string[] = ['SupplierId', 'Name', 'TelephoneNumber', 'View'];
@@ -27,12 +27,13 @@ export class ListSuppliersComponent implements AfterViewInit {
   options: {} = {}
 
   constructor(private http:HttpService,  
-    private router: Router, 
-    private renderer: Renderer2){
+    private router: Router
+  ){
     this.getSuppliers();
     this.isMobile = this.checkIfMobileDevice();
   }
 
+  //Generic way of getting suppliers so it can be reused in the search.
   getSuppliers(search?:string){
     this.http.getPaged(this.path, this.pageNumber, this.pageSize, search).subscribe((resp:any) => {
       this.dataSource = resp.results;
@@ -44,22 +45,8 @@ export class ListSuppliersComponent implements AfterViewInit {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
-  setMobileProperties(){
-    const rows = document.querySelectorAll('.supplier-table tr')
-    const rows2 = document.querySelectorAll('.tr');
-    const rows3 = document.querySelectorAll('tr.mat-row');
-
-
-      rows.forEach(row => {
-        this.renderer.addClass(row, 'clickable-row');
-        this.renderer.listen(row, 'click', () => {
-          this.editField(row);
-        });
-      });
-  }
-
   createSupplier(){
-    this.router.navigate(['supplier', 'edit']);
+    this.router.navigate(['supplier', 'create']);
   }
 
   editField(element:any){
@@ -69,19 +56,6 @@ export class ListSuppliersComponent implements AfterViewInit {
   onPageChange(event: PageEvent) {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.updateItems();
-  }
-
-  updateItems() {
-    const startIndex = this.pageNumber * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
     this.getSuppliers();
-    // this.pageSize = this.pageSizeOptions.slice(startIndex, endIndex);
-  }
-
-  ngAfterViewInit() {
-    if (this.isMobile) {
-      this.setMobileProperties();
-    }
   }
 }
